@@ -14,17 +14,22 @@ public class GestioneEventi {
 
     public static void main(String[] args) {
 
-        System.out.println("funz");
 
         EntityManager em = emf.createEntityManager();
         EventoDAO ed = new EventoDAO(em);
 
 
-        Evento ev = new Evento("titolo", (LocalDate.parse("2010-01-12")), "descrizione", TipoEvento.PRIVATO, 10);
+        Evento ev = new Evento("titolo", (LocalDate.now()), "descrizione", TipoEvento.PRIVATO, 10);
 
         ed.save(ev);
-        System.out.println(ed.findById(1));
+
+
+        System.out.println(ed.findById(2));
+
         ed.findByIdAndDelete(1);
+
+        em.close();
+        emf.close();
 
     }
 

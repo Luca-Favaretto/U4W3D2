@@ -14,7 +14,6 @@ public class EventoDAO {
 
     public void save(Evento evento) {
 
-
         EntityTransaction transaction = em.getTransaction();
 
         transaction.begin();
