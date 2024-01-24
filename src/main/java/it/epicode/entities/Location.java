@@ -13,7 +13,7 @@ public class Location {
     private String nome;
     private String citta;
 
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
     private List<Evento> evento;
 
     public Location() {
@@ -22,6 +22,10 @@ public class Location {
     public Location(String nome, String citta) {
         this.nome = nome;
         this.citta = citta;
+    }
+
+    public List<Evento> getEvento() {
+        return evento;
     }
 
     public Long getId() {

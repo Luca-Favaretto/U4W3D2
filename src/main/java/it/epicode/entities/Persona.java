@@ -19,7 +19,7 @@ public class Persona {
     private LocalDate dataDiNasciata;
     @Enumerated(EnumType.STRING)
     private Sesso sesso;
-    @OneToMany(mappedBy = "persona")
+    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL)
     private Set<Partecipazione> Partecipazione = new HashSet<>();
 
     public Persona() {
