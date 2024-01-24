@@ -1,4 +1,4 @@
-package it.epicode.baseclass;
+package it.epicode.enumpack;
 
 public enum TipoEvento {
     PUBBLICO, PRIVATO

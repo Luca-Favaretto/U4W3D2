@@ -1,8 +1,16 @@
 package it.epicode;
 
-import it.epicode.baseclass.Evento;
-import it.epicode.baseclass.TipoEvento;
 import it.epicode.dao.EventoDAO;
+import it.epicode.dao.LocationDAO;
+import it.epicode.dao.PartecipazioneDAO;
+import it.epicode.dao.PersonaDAO;
+import it.epicode.entities.Evento;
+import it.epicode.entities.Location;
+import it.epicode.entities.Partecipazione;
+import it.epicode.entities.Persona;
+import it.epicode.enumpack.Sesso;
+import it.epicode.enumpack.Stato;
+import it.epicode.enumpack.TipoEvento;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,17 +24,23 @@ public class GestioneEventi {
 
 
         EntityManager em = emf.createEntityManager();
-        EventoDAO ed = new EventoDAO(em);
 
+        EventoDAO eventoDAO = new EventoDAO(em);
+        LocationDAO locationDAO = new LocationDAO(em);
+        PersonaDAO personaDAO = new PersonaDAO(em);
+        PartecipazioneDAO partecipazioneDAO = new PartecipazioneDAO(em);
 
-        Evento ev = new Evento("titolo", (LocalDate.now()), "descrizione", TipoEvento.PRIVATO, 10);
+        Location loc1 = new Location("Grezzan", "Verona");
+        Evento ev1 = new Evento("Orman show", LocalDate.now(), "Bellisimo", TipoEvento.PRIVATO, 20, loc1);
+        Persona ps1 = new Persona("Luca", "Fava", "fava@iammi.it", LocalDate.parse("1995-01-01"), Sesso.M);
+        Partecipazione pa1 = new Partecipazione(ps1, ev1, Stato.CONFERMATO);
 
-        ed.save(ev);
+//        locationDAO.save(loc1);
+//        eventoDAO.save(ev1);
+//        personaDAO.save(ps1);
+//        partecipazioneDAO.save(pa1);
+        eventoDAO.findByIdAndDelete(11);
 
-
-        System.out.println(ed.findById(2));
-
-        ed.findByIdAndDelete(1);
 
         em.close();
         emf.close();

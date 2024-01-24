@@ -1,38 +1,38 @@
 package it.epicode.dao;
 
-import it.epicode.entities.Evento;
+import it.epicode.entities.Persona;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-public class EventoDAO {
+public class PersonaDAO {
     private final EntityManager em;
 
-    public EventoDAO(EntityManager em) {
+    public PersonaDAO(EntityManager em) {
         this.em = em;
     }
 
-    public void save(Evento evento) {
+    public void save(Persona persona) {
 
         EntityTransaction transaction = em.getTransaction();
 
         transaction.begin();
 
-        em.persist(evento);
+        em.persist(persona);
 
         transaction.commit();
 
-        System.out.println("Evento " + evento.getTitolo() + " aggiunto correttamente!");
+        System.out.println("Persona " + persona.getNome() + " aggiunto correttamente!");
     }
 
-    public Evento findById(long id) {
+    public Persona findById(long id) {
 
-        return em.find(Evento.class, id);
+        return em.find(Persona.class, id);
     }
 
     public void findByIdAndDelete(long id) {
 
-        Evento found = this.findById(id);
+        Persona found = this.findById(id);
 
         if (found != null) {
 
@@ -47,11 +47,11 @@ public class EventoDAO {
 
             transaction.commit();
 
-            System.out.println("Evento " + found.getTitolo() + " eliminato correttamente!");
+            System.out.println("Persona " + found.getNome() + " eliminato correttamente!");
 
         } else {
 
-            System.out.println("L'evento con l'id " + id + " non è stato trovato");
+            System.out.println("L'persona con l'id " + id + " non è stato trovato");
         }
     }
 }
