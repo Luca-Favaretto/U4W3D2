@@ -54,4 +54,6 @@ public class PartecipazioneDAO {
             System.out.println("L'partecipazione con l'id " + id + " non è stato trovato");
         }
     }
+
+
 }

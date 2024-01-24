@@ -39,6 +39,7 @@ public class GestioneEventi {
 //        eventoDAO.save(ev1);
 //        personaDAO.save(ps1);
 //        partecipazioneDAO.save(pa1);
+        eventoDAO.findByIdAndDelete(15);
         eventoDAO.findByIdAndDelete(11);
 
 

@@ -4,8 +4,9 @@ import it.epicode.enumpack.Sesso;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Comparator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @Entity
 public class Persona {
@@ -19,8 +20,9 @@ public class Persona {
     private LocalDate dataDiNasciata;
     @Enumerated(EnumType.STRING)
     private Sesso sesso;
-    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL)
-    private Set<Partecipazione> Partecipazione = new HashSet<>();
+    @OneToMany(mappedBy = "persona")
+    private SortedSet<Partecipazione> Partecipazione = new TreeSet<>(Comparator.comparing(partecipazione -> partecipazione.getEvento().getDataEvento())) {
+    };
 
     public Persona() {
     }
@@ -78,11 +80,11 @@ public class Persona {
         this.sesso = sesso;
     }
 
-    public Set<it.epicode.entities.Partecipazione> getPartecipazione() {
+    public SortedSet<it.epicode.entities.Partecipazione> getPartecipazione() {
         return Partecipazione;
     }
 
-    public void setPartecipazione(Set<it.epicode.entities.Partecipazione> partecipazione) {
+    public void setPartecipazione(SortedSet<it.epicode.entities.Partecipazione> partecipazione) {
         Partecipazione = partecipazione;
     }
 
