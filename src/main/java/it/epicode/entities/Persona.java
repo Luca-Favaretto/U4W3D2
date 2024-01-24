@@ -4,9 +4,7 @@ import it.epicode.enumpack.Sesso;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 @Entity
 public class Persona {
@@ -21,8 +19,8 @@ public class Persona {
     @Enumerated(EnumType.STRING)
     private Sesso sesso;
     @OneToMany(mappedBy = "persona")
-    private SortedSet<Partecipazione> Partecipazione = new TreeSet<>(Comparator.comparing(partecipazione -> partecipazione.getEvento().getDataEvento())) {
-    };
+
+    private Set<Partecipazione> partecipazioni = new HashSet<>();
 
     public Persona() {
     }
@@ -35,6 +33,7 @@ public class Persona {
         this.dataDiNasciata = dataDiNasciata;
         this.sesso = sesso;
     }
+
 
     public Long getId() {
         return id;
@@ -80,13 +79,6 @@ public class Persona {
         this.sesso = sesso;
     }
 
-    public SortedSet<it.epicode.entities.Partecipazione> getPartecipazione() {
-        return Partecipazione;
-    }
-
-    public void setPartecipazione(SortedSet<it.epicode.entities.Partecipazione> partecipazione) {
-        Partecipazione = partecipazione;
-    }
 
     @Override
     public String toString() {
@@ -97,7 +89,7 @@ public class Persona {
                 ", email='" + email + '\'' +
                 ", dataDiNasciata=" + dataDiNasciata +
                 ", sesso=" + sesso +
-                ", Partecipazione=" + Partecipazione +
+                ", Partecipazione=" + partecipazioni +
                 '}';
     }
 }

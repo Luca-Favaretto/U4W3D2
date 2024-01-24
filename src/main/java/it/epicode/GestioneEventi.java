@@ -24,27 +24,30 @@ public class GestioneEventi {
 
 
         EntityManager em = emf.createEntityManager();
+        try {
+            EventoDAO eventoDAO = new EventoDAO(em);
+            LocationDAO locationDAO = new LocationDAO(em);
+            PersonaDAO personaDAO = new PersonaDAO(em);
+            PartecipazioneDAO partecipazioneDAO = new PartecipazioneDAO(em);
 
-        EventoDAO eventoDAO = new EventoDAO(em);
-        LocationDAO locationDAO = new LocationDAO(em);
-        PersonaDAO personaDAO = new PersonaDAO(em);
-        PartecipazioneDAO partecipazioneDAO = new PartecipazioneDAO(em);
+            Location loc1 = new Location("Grezzan", "Verona");
+            Evento ev1 = new Evento("Orman show", LocalDate.now(), "Bellisimo", TipoEvento.PRIVATO, 20, loc1);
+            Persona ps1 = new Persona("Luca", "Fava", "fava@iammi.it", LocalDate.parse("1995-01-01"), Sesso.M);
+            Partecipazione pa1 = new Partecipazione(ps1, ev1, Stato.CONFERMATO);
 
-        Location loc1 = new Location("Grezzan", "Verona");
-        Evento ev1 = new Evento("Orman show", LocalDate.now(), "Bellisimo", TipoEvento.PRIVATO, 20, loc1);
-        Persona ps1 = new Persona("Luca", "Fava", "fava@iammi.it", LocalDate.parse("1995-01-01"), Sesso.M);
-        Partecipazione pa1 = new Partecipazione(ps1, ev1, Stato.CONFERMATO);
+            locationDAO.save(loc1);
+            eventoDAO.save(ev1);
+            personaDAO.save(ps1);
+            partecipazioneDAO.save(pa1);
+            eventoDAO.findByIdAndDelete(15);
+            eventoDAO.findByIdAndDelete(11);
+        } catch (Exception ex) {
+            System.err.println("L'errore è " + ex);
+        } finally {
+            em.close();
+            emf.close();
+        }
 
-//        locationDAO.save(loc1);
-//        eventoDAO.save(ev1);
-//        personaDAO.save(ps1);
-//        partecipazioneDAO.save(pa1);
-        eventoDAO.findByIdAndDelete(15);
-        eventoDAO.findByIdAndDelete(11);
-
-
-        em.close();
-        emf.close();
 
     }
 
