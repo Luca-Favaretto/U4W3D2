@@ -4,18 +4,21 @@ import it.epicode.dao.EventoDAO;
 import it.epicode.dao.LocationDAO;
 import it.epicode.dao.PartecipazioneDAO;
 import it.epicode.dao.PersonaDAO;
-import it.epicode.entities.Evento;
 import it.epicode.entities.Location;
 import it.epicode.entities.Partecipazione;
 import it.epicode.entities.Persona;
+import it.epicode.enumpack.Genere;
 import it.epicode.enumpack.Sesso;
 import it.epicode.enumpack.Stato;
 import it.epicode.enumpack.TipoEvento;
+import it.epicode.subclassevento.Concerto;
+import it.epicode.subclassevento.PartitaDiCalcio;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.time.LocalDate;
+import java.util.List;
 
 public class GestioneEventi {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("gestioneeventi");
@@ -31,16 +34,41 @@ public class GestioneEventi {
             PartecipazioneDAO partecipazioneDAO = new PartecipazioneDAO(em);
 
             Location loc1 = new Location("Grezzan", "Verona");
-            Evento ev1 = new Evento("Orman show", LocalDate.now(), "Bellisimo", TipoEvento.PRIVATO, 20, loc1);
+            Concerto cv1 = new Concerto("Orman show", LocalDate.now(), "Bellisimo", TipoEvento.PRIVATO, 20, loc1, Genere.ROCK, true);
             Persona ps1 = new Persona("Luca", "Fava", "fava@iammi.it", LocalDate.parse("1995-01-01"), Sesso.M);
-            Partecipazione pa1 = new Partecipazione(ps1, ev1, Stato.CONFERMATO);
+            Partecipazione pa1 = new Partecipazione(ps1, cv1, Stato.CONFERMATO);
+            PartitaDiCalcio par1 = new PartitaDiCalcio("serieA", LocalDate.now(), "roma-napoli", TipoEvento.PUBBLICO, 3000, loc1, "Roma", "Napoli", 2, 0);
+            PartitaDiCalcio par2 = new PartitaDiCalcio("serieB", LocalDate.now(), "milano-monza", TipoEvento.PUBBLICO, 3000, loc1, "Milano", "Monza", 2, 0);
+            PartitaDiCalcio par3 = new PartitaDiCalcio("serieC", LocalDate.now(), "inter-juve", TipoEvento.PUBBLICO, 3000, loc1, "Inter", "Juve", 0, 0);
+            PartitaDiCalcio par4 = new PartitaDiCalcio("serieD", LocalDate.now(), "verona-fiorentina", TipoEvento.PUBBLICO, 3000, loc1, "Verona", "Fiorentina", 1, 3);
 
+            eventoDAO.save(par1);
+            eventoDAO.save(par2);
+            eventoDAO.save(par3);
+            eventoDAO.save(par4);
             locationDAO.save(loc1);
-            eventoDAO.save(ev1);
+            eventoDAO.save(cv1);
             personaDAO.save(ps1);
             partecipazioneDAO.save(pa1);
-            eventoDAO.findByIdAndDelete(15);
-            eventoDAO.findByIdAndDelete(11);
+            List<Concerto> inStreaming = eventoDAO.getConcertiInStreaming(true);
+            List<Concerto> notStreaming = eventoDAO.getConcertiInStreaming(false);
+            List<Concerto> rock = eventoDAO.getConcertiPerGenere(Genere.ROCK);
+            System.out.println("eventi in streaming");
+            inStreaming.forEach(System.out::println);
+            System.out.println("eventi non streaming");
+            notStreaming.forEach(System.out::println);
+            System.out.println("eventi in streaming");
+            rock.forEach(System.out::println);
+            List<PartitaDiCalcio> vinteInCasa = eventoDAO.vinteInCasa();
+            List<PartitaDiCalcio> vinteInTrasferta = eventoDAO.vinteInTrasferta();
+
+            System.out.println("gare di calcio vinte in casa");
+            vinteInCasa.forEach(System.out::println);
+            System.out.println("gare di calcio vinte in trasferta");
+            vinteInTrasferta.forEach(System.out::println);
+            System.out.println("gara in pareggio");
+
+
         } catch (Exception ex) {
             System.err.println("L'errore è " + ex);
         } finally {

@@ -1,10 +1,12 @@
 package it.epicode.entities;
 
 import it.epicode.enumpack.Sesso;
+import it.epicode.subclassevento.GaraDiAtletica;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Persona {
@@ -18,8 +20,11 @@ public class Persona {
     private LocalDate dataDiNasciata;
     @Enumerated(EnumType.STRING)
     private Sesso sesso;
-    @OneToMany(mappedBy = "persona")
 
+    @ManyToMany
+    @JoinTable(name = "gara_persona", joinColumns = @JoinColumn(name = "persona_id"), inverseJoinColumns = @JoinColumn(name = "gara_id"))
+    private Set<GaraDiAtletica> gareDiAtletica;
+    @OneToMany(mappedBy = "persona")
     private Set<Partecipazione> partecipazioni = new HashSet<>();
 
     public Persona() {

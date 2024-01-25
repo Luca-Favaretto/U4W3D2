@@ -8,26 +8,29 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "evento")
-public class Evento {
+public abstract class Evento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
-    private Long id;
-    private String titolo;
-    private LocalDate dataEvento;
-    private String descrizione;
+    protected Long id;
+    protected String titolo;
+    protected LocalDate dataEvento;
+    protected String descrizione;
     @Enumerated(EnumType.STRING)
-    private TipoEvento tipoEvento;
-    private Integer numeroMassimoPartecipanti;
+    protected TipoEvento tipoEvento;
+    protected Integer numeroMassimoPartecipanti;
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private Set<Partecipazione> partecipazioni = new HashSet<>();
+    @OrderBy("Evento.dataEvento ASD")
+    protected Set<Partecipazione> partecipazioni = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "location_id")
-    private Location location;
+    protected Location location;
+
 
     public Evento() {
     }
@@ -73,17 +76,6 @@ public class Evento {
         this.partecipazioni = partecipazioni;
     }
 
-    @Override
-    public String toString() {
-        return "Evento{" +
-                "id=" + id +
-                ", titolo='" + titolo + '\'' +
-                ", dataEvento=" + dataEvento +
-                ", descrizione='" + descrizione + '\'' +
-                ", tipoEvento=" + tipoEvento +
-                ", numeroMassimoPartecipanti=" + numeroMassimoPartecipanti +
-                '}';
-    }
 
     public String getDescrizione() {
         return descrizione;
