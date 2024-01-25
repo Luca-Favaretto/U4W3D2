@@ -1,8 +1,12 @@
 package it.epicode.dao;
 
 import it.epicode.entities.Evento;
+import it.epicode.entities.Partecipazione;
+import it.epicode.entities.Persona;
 import it.epicode.enumpack.Genere;
+import it.epicode.enumpack.Stato;
 import it.epicode.subclassevento.Concerto;
+import it.epicode.subclassevento.GaraDiAtletica;
 import it.epicode.subclassevento.PartitaDiCalcio;
 
 import javax.persistence.EntityManager;
@@ -15,6 +19,36 @@ public class EventoDAO {
 
     public EventoDAO(EntityManager em) {
         this.em = em;
+    }
+
+    public List<Partecipazione> getPartecipazioniDaConfermarePerEvento(Evento evento) {
+        TypedQuery<Partecipazione> query = em.createQuery("SELECT p FROM Partecipazione p WHERE p.stato = :statoDaConfermare AND p.evento = :evento", Partecipazione.class);
+        query.setParameter("statoDaConfermare", Stato.DA_CONFERMARE);
+        query.setParameter("evento", evento);
+        return query.getResultList();
+    }
+
+    public List<Evento> getEventiSoldOut() {
+        TypedQuery<Evento> query = em.createQuery("SELECT e FROM Evento e WHERE e.numeroMassimoPartecipanti=SIZE(e.partecipazioni)", Evento.class);
+
+        return query.getResultList();
+    }
+
+    public List<GaraDiAtletica> getGareDiAtleticaPerPartecipante(Persona atleta) {
+        TypedQuery<GaraDiAtletica> query = em.createQuery("SELECT g FROM GaraDiAtletica g WHERE :atleta MEMBER OF g.atleti", GaraDiAtletica.class);
+        query.setParameter("atleta", atleta);
+        return query.getResultList();
+    }
+
+    public List<GaraDiAtletica> getGareDiAtleticaPerVincitore(Persona vincitore) {
+        TypedQuery<GaraDiAtletica> query = em.createQuery("SELECT g FROM GaraDiAtletica g WHERE g.vincitore=:vincitore", GaraDiAtletica.class);
+        query.setParameter("vincitore", vincitore);
+        return query.getResultList();
+    }
+
+    public List<PartitaDiCalcio> pareggi() {
+        TypedQuery<PartitaDiCalcio> query = em.createNamedQuery("getPareggi", PartitaDiCalcio.class);
+        return query.getResultList();
     }
 
     public List<PartitaDiCalcio> vinteInCasa() {

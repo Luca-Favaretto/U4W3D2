@@ -36,6 +36,15 @@ public class Partecipazione {
         return id;
     }
 
+    @Override
+    public String toString() {
+        return "Partecipazione{" +
+                "id=" + id +
+                ", persona=" + persona +
+                ", evento=" + evento +
+                ", stato=" + stato +
+                '}';
+    }
 
     public Persona getPersona() {
         return persona;
